@@ -6,17 +6,34 @@ import Contact from "./src/components/Contact";
 import * as React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
+import useAuth from "./src/hook/auth";
+import {Context} from "./src/context/store";
+import {reducer} from "./src/reducer/Reducer";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-    return (
-        <NavigationContainer>
+    const {state, dispatch} = useAuth(reducer);
+
+    let navigator = (
+        <Stack.Navigator>
+            <Stack.Screen name="Accueil" component={Accueil} />
+        </Stack.Navigator>
+    );
+    if (state.jwt) {
+        navigator = (
             <Stack.Navigator>
-                <Stack.Screen name="Accueil" component={Accueil} />
                 <Stack.Screen name="ContactsList" component={ContactsList} />
                 <Stack.Screen name="Contact" component={Contact} />
             </Stack.Navigator>
+        );
+    }
+
+    return (
+        <NavigationContainer>
+            <Context.Provider value={{state, dispatch}}>
+                {navigator}
+            </Context.Provider>
         </NavigationContainer>
     );
 }

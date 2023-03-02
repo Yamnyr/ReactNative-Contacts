@@ -1,18 +1,27 @@
 import { StyleSheet, Text, View } from 'react-native';
 import {TextInput, TouchableOpacity} from "react-native-web";
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import {Authentification} from "../services/api/auth";
+import * as Keychain from 'react-native-keychain';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {Context} from "../context/store";
 
 
 export default function Accueil(props) {
-    const [username, setUsername] = useState('');
+    const { dispatch } = useContext(Context);
+    const [login, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const Login = (username, password) => {
-        Authentification({ username} , {password}).then((response) => {
-
+    function handleSubmit(event) {
+        Authentification({ login, password }).then(async (tokens) => {
+            // window.location.reload();
+            const {jwt, refreshToken} = tokens;
+            await Keychain.setGenericPassword("refreshToken", refreshToken);
+            dispatch({type: "SET_JWT", jwt});
+            console.log("Accueil::handleSubmit", tokens)
         });
-    };
+    }
 
     return (
         <View>
@@ -21,21 +30,21 @@ export default function Accueil(props) {
             </View>
             <View style={styles.Content}>
                 <View style={styles.container}>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <TextInput
                             style={styles.input}
                             placeholder="Login"
-                            onChangeText={(text) => setUsername(text)}
-                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            value={login}
                         />
                         <TextInput
                             style={styles.input}
                             placeholder="password"
                             secureTextEntry={true}
-                            onChangeText={(text) => setPassword(text)}
+                            onChange={(e) => setPassword(e.target.value)}
                             value={password}
                         />
-                        <TouchableOpacity style={styles.button} onPress={Login}>
+                        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                             <Text style={styles.buttonText}>Se connecter</Text>
                         </TouchableOpacity>
                     </form>
