@@ -10,9 +10,5 @@ export async function Authentification(credentials) {
         },
         body: JSON.stringify(credentials),
     })
-        .then((response) => response.json())
-
-        .catch((error) => {
-            console.log("Authentification::error", error);
-        });
+        .then((response) => response.json());
 }

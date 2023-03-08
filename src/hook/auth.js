@@ -1,8 +1,6 @@
 import { useEffect, useReducer } from "react";
 
 
-export default function useAuth(){
-
 
     export function reducer(state, action) {
         console.log(action)
@@ -13,5 +11,3 @@ export default function useAuth(){
                 throw new Error();
         }
     }
-
-}

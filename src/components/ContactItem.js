@@ -1,20 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native';
-import NavBar from "./NavBar";
-import Error from "./Error";
-import Login from "./Login";
-export default function ContactItem(props) {
+import {Button, StyleSheet, Text, View} from 'react-native';
+import {TouchableOpacity} from "react-native-web";
+import {useNavigation} from "@react-navigation/native";
+
+export default function ContactItem({data}) {
+    const {firstName, lastName, avatar, id} = data;
+    const navigation = useNavigation();
     return (
-        <View>
-        </View>
+        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('Contact',{itemId: {id}})}>
+            <View>
+                <Text>{firstName} {lastName}</Text>
+            </View>
+        </TouchableOpacity>
     )
 }
 
-
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
+        opacity: 0.8,
+        margin: 10,
+        padding: 10,
+        borderRadius: 5,
+    },
 });

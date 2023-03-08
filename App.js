@@ -9,11 +9,16 @@ import { NavigationContainer } from '@react-navigation/native';
 import useAuth from "./src/hook/auth";
 import {Context} from "./src/context/store";
 import {reducer} from "./src/reducer/Reducer";
+import {useReducer} from "react";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-    const {state, dispatch} = useAuth(reducer);
+    const defaultState = {
+        jwt: null,
+    };
+
+    const [state, dispatch] = useReducer(reducer, defaultState);
 
     let navigator = (
         <Stack.Navigator>
