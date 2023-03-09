@@ -1,13 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import {TextInput, TouchableOpacity} from "react-native-web";
-import React, {useContext, useReducer, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Authentification} from "../services/api/auth";
-import * as Keychain from 'react-native-keychain';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {Context} from "../context/store";
-import {reducer} from "../reducer/Reducer";
-import useAuth from "../hook/auth";
 import {setRefreshToken, setToken} from "../actions/authentification";
 
 

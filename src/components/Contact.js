@@ -1,31 +1,34 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
 import React, {useContext, useEffect, useState} from "react";
-import {fetchAllContact, fetchContact} from "../services/api/contacts";
+import {deleteContact, fetchAllContact, fetchContact} from "../services/api/contacts";
 import ContactItem from "./ContactItem";
 import {Context} from "../context/store";
 import {setToken} from "../actions/authentification";
 import {TouchableOpacity} from "react-native-web";
+import {useNavigation} from "@react-navigation/native";
 
 export default function Contact({route}) {
     const { state, dispatch } = useContext(Context);
     const { itemId } = route.params;
 
-    console.log({itemId})
     const [avatar, setAvatar] = useState('')
-    const [nom, setNom] = useState('')
-    const [prenom, setPrenom] = useState('')
+    const [lastname, setLastName] = useState('')
+    const [firstName, setFirstName] = useState('')
     const [email, setEmail] = useState('')
-    const [telephone, setTelephone] = useState('')
+    const [phone, setPhone] = useState('')
     const [error, setError] = useState(null);
+    const [contact, setContact] = useState(null);
+    const navigation = useNavigation();
 
     useEffect(() => {
         fetchContact(state.jwt, itemId.id)
             .then((contact) => {
                 setAvatar(contact.avatar),
-                    setPrenom(contact.firstName),
-                    setNom(contact.lastName)
+                    setFirstName(contact.firstName),
+                    setLastName(contact.lastName)
                 setEmail(contact.email)
-                setTelephone(contact.phone)
+                setPhone(contact.phone)
+                setContact(contact)
             });
     }, [itemId]);
 
@@ -33,14 +36,20 @@ export default function Contact({route}) {
         <View>
             <View style={styles.Content}>
                 <Image style={styles.avatar} source={{uri: avatar}} />
-                <Text style={styles.text}>{prenom} {nom}</Text>
+                <Text style={styles.text}>{firstName} {lastname}</Text>
                 <Text style={styles.text}>{email}</Text>
-                <Text style={styles.text}>{telephone}</Text>
+                <Text style={styles.text}>{phone}</Text>
                 <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Call</Text>
+                    <Text style={styles.buttonText}>Appeler</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ContactEdit',{itemId: itemId.id, data:contact})}>
+                    <Text style={styles.buttonText}>Modifier</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => deleteContact(state.jwt, itemId.id).then(navigation.navigate('ContactsList'))}>
+                    <Text style={styles.buttonText}>Supprimer</Text>
                 </TouchableOpacity>
             </View>
-                <button style={styles.disconnect} onClick={() => dispatch(setToken(null))}>Disconnect</button>
+                <button style={styles.disconnect} onClick={() => dispatch(setToken(null))}>Se deconnecter</button>
             <View style={styles.Error}>
                 <Text style={styles.error}>{error}</Text>
             </View>

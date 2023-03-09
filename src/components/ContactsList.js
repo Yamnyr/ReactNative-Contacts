@@ -13,8 +13,6 @@ export default function ContactsList() {
     const [listContacts, setListContacts] = useState([])
     const [error, setError] = useState(null)
 
-    console.log("ContactsList", state)
-
     useEffect(() => {
         fetchAllContact(state.jwt)
             .then((contacts) => {if (contacts.error) {
@@ -24,7 +22,6 @@ export default function ContactsList() {
                      <ContactItem key={contact.id} data={contact}/>
                 )));
             }});
-        console.log(listContacts, "listContact")
     }, [state.jwt]);
 
 
@@ -33,7 +30,7 @@ export default function ContactsList() {
             <ScrollView style={styles.Content}>
                 {listContacts}
             </ScrollView>
-                <button style={styles.disconnect} onClick={() => dispatch(setToken(null))}>Disconnect</button>
+                <button style={styles.disconnect} onClick={() => dispatch(setToken(null))}>Se deconnecter</button>
             <View style={styles.Error}>
                 <Text style={styles.error}>{error}</Text>
             </View>

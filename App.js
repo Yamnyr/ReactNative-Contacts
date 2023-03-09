@@ -10,6 +10,7 @@ import useAuth from "./src/hook/auth";
 import {Context} from "./src/context/store";
 import {reducer} from "./src/reducer/Reducer";
 import {useReducer} from "react";
+import ContactEdit from "./src/components/ContactEdit";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ export default function App() {
             <Stack.Navigator>
                 <Stack.Screen name="ContactsList" component={ContactsList} />
                 <Stack.Screen name="Contact" component={Contact} />
+                <Stack.Screen name="ContactEdit" component={ContactEdit} />
             </Stack.Navigator>
         );
     }
