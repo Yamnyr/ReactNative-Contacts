@@ -14,8 +14,8 @@ export async function fetchAllContact(jwt) {
             console.log(error);
         });
 }
-export async function fetchContact(jwt) {
-    return fetch(`${BASE_URL}/api/contact/:id`, {
+export async function fetchContact(jwt, id) {
+    return fetch(`${BASE_URL}/api/contact/${id}`, {
         method: "GET",
         headers: {
             Authorization: `Bearer ${jwt}`,

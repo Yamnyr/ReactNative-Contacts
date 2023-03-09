@@ -14,13 +14,30 @@ import {setRefreshToken, setToken} from "../actions/authentification";
 
 export default function Accueil({navigation}) {
     const { dispatch } = useContext(Context);
-    const [login, setUsername] = useState('root');
-    const [password, setPassword] = useState('root');
+    const [login, setUsername] = useState('test');
+    const [password, setPassword] = useState('test');
     const [error, setError] = useState(null);
 
 
-    function handleSubmit() {
-        Authentification({ login, password }).then(async (tokens) => {
+    // const credentials = await Keychain.getGenericPassword();
+    // if (credentials) {
+    //     console.log(
+    //         'Credentials successfully loaded for user ' + credentials
+    //     );
+    //     authentication(credentials)
+    // } else {
+    //     console.log('No credentials stored');
+    // }
+
+    /*
+    je recupère le refreshtoken
+    verifie si il est set
+    si oui lance la meyhode autentification
+    si non ne fait rien
+    */
+
+    function authentication(params) {
+        Authentification(params).then(async (tokens) => {
             if (tokens.error) {
                 setError(tokens.message);
             } else {
@@ -28,16 +45,19 @@ export default function Accueil({navigation}) {
                 // await Keychain.setGenericPassword("refreshToken", refreshToken);
                 // dispatch({type: "SET_JWT", jwt});
                 dispatch(setToken(jwt));
+
                 console.log("Accueil::handleSubmit", tokens)
             }
         });
     }
 
+
+    function handleSubmit() {
+        authentication({ login, password });
+    }
+
     return (
         <View>
-            <View style={styles.NavBar}>
-                <Text>Accueil</Text>
-            </View>
             <View style={styles.Content}>
                 <View style={styles.container}>
                     <form onSubmit={handleSubmit}>
@@ -61,29 +81,25 @@ export default function Accueil({navigation}) {
                 </View>
             </View>
             <View style={styles.Error}>
-                <Text>{error}</Text>
+                <Text style={styles.error}>{error}</Text>
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    NavBar:{
-        marginTop: 0,
-        backgroundColor: 'red',
-        fontSize:30,
-        textAlign: "center",
-    },
     Content:{
-        marginHorizontal: 30,
-        backgroundColor: 'blue',
-        flex: 1,
+        backgroundColor: '#004677',
         textAlign: "center",
+        height:'80vh',
     },
     Error:{
-        backgroundColor: 'green',
-        marginHorizontal: 30,
-        marginTop: 20,
+        backgroundColor: '#770046',
+    },
+    error:{
+        margin:20,
+        color: 'white',
+        fontWeight: 'bold'
     },
     container: {
         flex: 1,
@@ -92,12 +108,13 @@ const styles = StyleSheet.create({
     input: {
         width: '80%',
         margin: 12,
-        borderWidth: 1,
-        borderColor: 'white',
+        borderWidth: 3,
+        borderColor: '#770046',
         padding: 10,
         fontSize:20,
         color: 'white',
         borderRadius: 5,
+        fontWeight: "bold",
     },
     button: {
         width: '80%',
@@ -105,12 +122,12 @@ const styles = StyleSheet.create({
         padding: 10,
         marginVertical: 20,
         borderRadius: 5,
-        backgroundColor:'grey',
+        backgroundColor:'#770046',
 
     },
     buttonText: {
         color: 'white',
         fontSize: 20,
-        textAlign: 'center',
+        fontWeight: "bold",
     },
 });

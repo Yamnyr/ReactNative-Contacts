@@ -17,25 +17,25 @@ export default function ContactsList() {
 
     useEffect(() => {
         fetchAllContact(state.jwt)
-            .then((contacts) => {
+            .then((contacts) => {if (contacts.error) {
+                setError(contacts.message);
+            } else {
                 setListContacts(contacts.map((contact) => (
                      <ContactItem key={contact.id} data={contact}/>
                 )));
-            });
+            }});
+        console.log(listContacts, "listContact")
     }, [state.jwt]);
 
 
     return (
         <View>
-            <View style={styles.NavBar}>
-                <Text>Accueil</Text>
-                <button style={styles.btn} onClick={() => dispatch(setToken(null))}>Disconnect</button>
-            </View>
             <ScrollView style={styles.Content}>
                 {listContacts}
             </ScrollView>
+                <button style={styles.disconnect} onClick={() => dispatch(setToken(null))}>Disconnect</button>
             <View style={styles.Error}>
-                <Text>{error}</Text>
+                <Text style={styles.error}>{error}</Text>
             </View>
         </View>
     )
@@ -43,23 +43,25 @@ export default function ContactsList() {
 
 
 const styles = StyleSheet.create({
-    NavBar:{
-        textAlign: "center",
-        justifyContent: 'space-between',
-        marginTop: "0vw",
-        backgroundColor: 'red',
-        width:'100vw',
-        fontSize:30,
+    disconnect:{
+        border: 'none',
+        color:"white",
+        fontSize:20,
+        padding:10,
+        fontWeight:"bold",
+        backgroundColor:'#770046',
     },
     Content:{
-        marginHorizontal: 30,
-        backgroundColor: 'blue',
-        height: '80vh',
+        height:'80vh',
+        backgroundColor: '#004677',
         textAlign: "center",
     },
     Error:{
-        backgroundColor: 'green',
-        marginHorizontal: 30,
-        marginTop: 20,
+        backgroundColor: '#770046',
+    },
+    error:{
+        margin:20,
+        color: 'white',
+        fontWeight: 'bold'
     },
 });

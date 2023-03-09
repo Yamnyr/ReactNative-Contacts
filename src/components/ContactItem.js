@@ -8,7 +8,7 @@ export default function ContactItem({data}) {
     return (
         <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('Contact',{itemId: {id}})}>
             <View>
-                <Text>{firstName} {lastName}</Text>
+                <Text style={styles.text}>{firstName} {lastName}</Text>
             </View>
         </TouchableOpacity>
     )
@@ -16,10 +16,17 @@ export default function ContactItem({data}) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
-        opacity: 0.8,
-        margin: 10,
-        padding: 10,
+        backgroundColor: 'transparent',
+        opacity: 1,
+        margin: 20,
+        padding: 15,
         borderRadius: 5,
+        borderWidth:3,
+        borderColor: '#770046',
     },
+    text:{
+        fontSize:20,
+        color: "white",
+        fontWeight: "bold",
+    }
 });

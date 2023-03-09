@@ -1,48 +1,48 @@
-import { StyleSheet, Text, View } from 'react-native';
-import {useEffect, useState} from "react";
+import { StyleSheet, Text, View, Image } from 'react-native';
+import React, {useContext, useEffect, useState} from "react";
 import {fetchAllContact, fetchContact} from "../services/api/contacts";
 import ContactItem from "./ContactItem";
-export default function Contact(route) {
+import {Context} from "../context/store";
+import {setToken} from "../actions/authentification";
+import {TouchableOpacity} from "react-native-web";
+
+export default function Contact({route}) {
+    const { state, dispatch } = useContext(Context);
     const { itemId } = route.params;
 
     console.log({itemId})
     const [avatar, setAvatar] = useState('')
     const [nom, setNom] = useState('')
     const [prenom, setPrenom] = useState('')
+    const [email, setEmail] = useState('')
+    const [telephone, setTelephone] = useState('')
+    const [error, setError] = useState(null);
 
-    // console.log("contact--itemId", itemId)
-
-
-/*    useEffect(() => {
-        fetchContact(itemId)
+    useEffect(() => {
+        fetchContact(state.jwt, itemId.id)
             .then((contact) => {
                 setAvatar(contact.avatar),
-                setPrenom(contact.prenom),
-                setNom(contact.nom)
+                    setPrenom(contact.firstName),
+                    setNom(contact.lastName)
+                setEmail(contact.email)
+                setTelephone(contact.phone)
             });
-    }, [itemId]);*/
-
-
+    }, [itemId]);
 
     return (
         <View>
-            <View style={styles.NavBar}>
-
-                <button style={styles.btn}>Back</button>
-
-                <button style={styles.btn}>Disconnect</button>
-                {/*NavBar*/}
-            </View>
             <View style={styles.Content}>
-                {/*<Text>{itemId.id}</Text>*/}
-                <Text>itemId: {JSON.stringify(itemId)}</Text>
-                <Text>Prenom</Text>
-                <Text>Email</Text>
-                <Text>Téléphone</Text>
-                <button>Call</button>
+                <Image style={styles.avatar} source={{uri: avatar}} />
+                <Text style={styles.text}>{prenom} {nom}</Text>
+                <Text style={styles.text}>{email}</Text>
+                <Text style={styles.text}>{telephone}</Text>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Call</Text>
+                </TouchableOpacity>
             </View>
+                <button style={styles.disconnect} onClick={() => dispatch(setToken(null))}>Disconnect</button>
             <View style={styles.Error}>
-                {/*error*/}
+                <Text style={styles.error}>{error}</Text>
             </View>
         </View>
     )
@@ -50,29 +50,71 @@ export default function Contact(route) {
 
 
 const styles = StyleSheet.create({
-    NavBar:{
-        marginTop: "0vw",
-        backgroundColor: 'red',
-        width:'100vw',
-        fontSize:30,
-        textAlign: "center",
-        flexDirection:'row',
-        justifyContent: 'space-between',
-
+    disconnect:{
+        border: 'none',
+        color:"white",
+        fontSize:20,
+        padding:10,
+        fontWeight:"bold",
+        backgroundColor:'#770046',
     },
     Content:{
-        marginHorizontal: 30,
-        backgroundColor: 'blue',
+        backgroundColor: '#004677',
         height: '80vh',
         textAlign: "center",
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    /*text: {
+        backgroundColor: '#fff',
+        opacity: 0.7,
+        margin: 10,
+        padding: 10,
+        borderRadius: 5,
+        width: '80%',
+    },*/
+    text: {
+        backgroundColor: 'transparent',
+        opacity: 1,
+        margin: 12,
+        padding: 10,
+        borderRadius: 5,
+        borderWidth:3,
+        borderColor: '#770046',
+        width: '80%',
+        color: "white",
+        fontWeight: "bold",
+        fontSize: 20,
+    },
+    avatar:{
+        width: 150,
+        height: 150,
+        borderRadius: 75,
+        marginVertical: 20,
+        borderColor:'#770046',
+        borderWidth:3,
     },
     Error:{
-        backgroundColor: 'green',
-        marginHorizontal: 30,
-        marginTop: 20,
-        height: '10vh'
+        backgroundColor: '#770046',
     },
-    btn:{
-        width: 100
-    }
+    error:{
+        margin:20,
+        color: 'white',
+        fontWeight: 'bold'
+    },
+    button: {
+        width: '80%',
+        marginHorizontal:'10%',
+        padding: 10,
+        marginVertical: 20,
+        borderRadius: 5,
+        backgroundColor:'#770046',
+
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 20,
+        textAlign: 'center',
+        fontWeight: "bold",
+    },
 });
