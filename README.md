@@ -6,8 +6,8 @@ Installation des dépendances JavaScript avec npm :
 
 ```shell
 npm install
-necessite l'installation de ce projet : https://github.com/Yamnyr/ReactNative-Contacts-auth-server
-                                        https://github.com/Yamnyr/ReactNative-Contacts-api-server
+necessite l'installation de ces projets : https://github.com/Yamnyr/ReactNative-Contacts-auth-server
+                                          https://github.com/Yamnyr/ReactNative-Contacts-api-server
 ```
 
 ## Développement
